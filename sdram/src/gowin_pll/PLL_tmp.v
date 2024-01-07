@@ -5,7 +5,7 @@
 //Part Number: GW5A-LV25MG121NC2/I1
 //Device: GW5A-25
 //Device Version: A
-//Created Time: Sat Dec 30 13:30:30 2023
+//Created Time: Wed Jan  3 04:02:09 2024
 
 //Change the instance name and port connections to the signal names
 //--------Copy here to design--------
@@ -13,6 +13,7 @@
     PLL100 your_instance_name(
         .clkout0(clkout0_o), //output clkout0
         .clkout1(clkout1_o), //output clkout1
+        .clkout2(clkout2_o), //output clkout2
         .clkin(clkin_i) //input clkin
     );
 

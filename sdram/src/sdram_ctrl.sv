@@ -1,24 +1,10 @@
-/*
-v0.9.9
-
-This controller is designed for the SDRAM module that comes with the LicheeTang 25k.
-The parameters are fixed, but modifying them should not be difficult.
-
-Dram timing is designed to satisfy both 100MHz and 133MHz.
-But the FPGA may not able to do so.
-
-Please keep this author's note.
-
-by: LAKKA
-Ja_P_S@outlook.com
-
-2023.12.30
-*/
-
 `timescale 1ns / 1ps
+
+// dram timing is designed to satisfy both 100MHz and 133MHz, but the FPGA may not able to do so.
 
 module SDRAM_CTRL(
     input clk,
+    input aux_clk,
     input rst_n,
 
     input cmd_en,
@@ -86,6 +72,11 @@ reg dq_wr_en;
 assign dq_rd = dq;
 assign dq = dq_wr_en ? dq_wr : 16'hZZ;
 
+
+reg [15:0] dq_rd_buf;
+always@(posedge aux_clk)begin
+    dq_rd_buf <= dq_rd;
+end
 
 
 reg cke_r;
@@ -186,7 +177,7 @@ always@(posedge clk or negedge rst_n) begin
                     init_state <= 4'd5;
                     init_cnt_r <= 13'b0;
 
-                    init_load_mode_reg(13'h030); //WR Burst, CL3, BL1
+                    init_load_mode_reg(13'h130); //WR Single, CL3, BL1
                 end
             end
             5: begin
@@ -433,9 +424,9 @@ always@(posedge clk)begin
             end
         endcase
 
-        if(rd_tick[3])begin
+        if(rd_tick[4])begin
             rd_ptr_in <= rd_ptr_in + 1'b1;
-            rd_buf[rd_ptr_in] <= dq_rd;
+            rd_buf[rd_ptr_in] <= dq_rd_buf;
         end
 
 

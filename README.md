@@ -3,7 +3,12 @@
 ## Overview
 The LicheeTang25k_SDRAM is a specialized SDRAM controller designed for the LicheeTang25k series. Total size is 64MB or 512Mb. Parameters are fixed, but modifying them should not be difficult.
 
-This branch is for 100MHz. Another branch for 133MHz is available, with a UART output.
+This branch is for 133MHz. Another branch for 100MHz is available.
+
+UART baudrate is 115200. Press S1 to trigger it.
+
+PLL & IODelay are used to meet the timing requirements. If the frequency is changed, the PLL & IODelay settings should be modified accordingly.
+
 
 ## Functional Interface
 
@@ -36,7 +41,7 @@ This branch is for 100MHz. Another branch for 133MHz is available, with a UART o
 - **init_fin:** Indicates the initialization status of the SDRAM; '0' for not initialized, '1' for initialized and ready.
 
 ## Performance
-- **Operating Frequency:** The controller currently runs at 100MHz.
-- **Random Read/Write Speed:** Approximately 50MB/s.
-- **Continuous Read/Write Speed:** Approximately 190MB/s.
+- **Operating Frequency:** The controller currently runs at 133MHz.
+- **Random Read/Write Speed:** Approximately 65MB/s.
+- **Continuous Read/Write Speed:** Approximately 260MB/s.
 - **Average Random Access Latency:** Around 100ns.

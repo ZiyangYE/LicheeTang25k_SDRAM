@@ -11,11 +11,24 @@ module top(
     output [12:0] sdram_adr,
     output [1:0] sdram_ba,
     output [1:0] sdram_dqm,
-    inout [15:0] sdram_dq
+    inout [15:0] sdram_dq,
+
+    output txp
 );
 
-wire clk_100M;
+
+wire clk_133M;
+wire aux_clk;
 wire sdram_init_fin;
+
+`include "print.svh"
+defparam tx.uart_freq = 115200;
+defparam tx.clk_freq = 133333000;
+
+assign txp = uart_txp;
+assign print_clk = clk_133M;
+
+
 
 reg cmd_en;
 reg cmd_wr_rd;
@@ -34,10 +47,17 @@ wire rd_av;
 reg rd_en;
 wire [15:0] rd_data;
 
+reg [7:0] tx_cnt;
+reg [2:0] rd_cnt;
+
 
 reg [3:0] test_status;
+reg [16*6-1:0] dataout;
 
-always@(posedge clk_100M or negedge sdram_init_fin)begin
+
+
+
+always@(posedge clk_133M or negedge sdram_init_fin)begin
     if(!sdram_init_fin)begin
         cmd_en <= 1'b0;
         cmd_wr_rd <= 1'b0;
@@ -51,40 +71,48 @@ always@(posedge clk_100M or negedge sdram_init_fin)begin
         rd_en <= 1'b0;
 
         test_status <= 4'd0;
+        
+        rd_cnt <= 3'd0;
+        tx_cnt <= 8'd0;
     end else begin
+        tx_cnt <= tx_cnt + 8'd1;
+
         rd_en<=1'b0;
         cmd_en<=1'b0;
         wr_en<=1'b0;
         case(test_status)
             4'd0:begin
                 wr_en <= 1'b1;
-                wr_data <= 16'd1234;
+                wr_data <= 16'hAAAA;
                 wr_mask <= 2'b00;
                 test_status <= 4'd1;
+
+                `print("Write aaaa ffff 0000 to ram0. \nWrite 5555 0000 ffff to ram1.\n",STR);
+                tx_cnt <= 0;
             end
             1:begin
                 wr_en <= 1'b1;
-                wr_data <= 16'd5678;
+                wr_data <= 16'hffff;
                 test_status <= 4'd2;
             end
             2:begin
                 wr_en <= 1'b1;
-                wr_data <= 16'd9012;
+                wr_data <= 16'h0000;
                 test_status <= 4'd3;
             end
             3:begin
                 wr_en <= 1'b1;
-                wr_data <= 16'd3456;
+                wr_data <= 16'h5555;
                 test_status <= 4'd4;
             end
             4:begin
                 wr_en <= 1'b1;
-                wr_data <= 16'd7890;
+                wr_data <= 16'h0000;
                 test_status <= 4'd5;
             end
             5:begin
                 wr_en <= 1'b1;
-                wr_data <= 16'd1234;
+                wr_data <= 16'hffff;
                 test_status <= 4'd6;
             end
             6:begin
@@ -114,26 +142,109 @@ always@(posedge clk_100M or negedge sdram_init_fin)begin
                 cmd_len <= 10'd3;
                 cmd_adr <= 25'h1000000;
                 test_status <= 4'd10;
+                
+                
             end
             10:begin
                 if(rd_av)begin
                     rd_en <= 1'b1;
+                end
+                if(rd_av && rd_en)begin
+                    rd_cnt <= rd_cnt + 3'd1;
+                    dataout[(5-rd_cnt)*16+:16] <= rd_data;
+                end
+
+                if(tx_cnt > 96)begin
+                    test_status <= 4'd11;
+                    `print("Read from ram0:\n",STR);
+                end
+            end
+            11:begin
+                if(tx_cnt > 128)begin
+                    test_status <= 4'd12;
+                    `print(dataout[95:48],6);//6 Byte Data
+                end
+            end
+            12:begin
+                if(tx_cnt > 144)begin
+                    test_status <= 4'd13;
+                    `print("\nRead from ram1:\n",STR);
+                end
+            end
+            13:begin
+                if(tx_cnt > 176)begin
+                    test_status <= 4'd14;
+                    `print(dataout[47:0],6);//6 Byte Data
+                end
+            end
+            14:begin
+                if(tx_cnt>192)begin
+                    test_status <= 4'd15;
+                    `print("\n\n",STR);
                 end
             end
         endcase
     end
 end
 
-
+wire sdram_clk_p;
 
 PLL100 SDRAM_PLL(
-    .clkout0(clk_100M), //output clkout0
-    .clkout1(sdram_clk),
+    .clkout0(clk_133M), //output clkout0
+    .clkout1(sdram_clk_p),
+    .clkout2(aux_clk),
     .clkin(clk_50M) //input clkin
 );
 
+IODELAY sdram_clk_dly(
+    .DO(sdram_clk),
+    .DF(),
+    .DI(sdram_clk_p),
+    .SDTAP(1'b0),
+    .VALUE(1'b0),
+    .DLYSTEP(8'b0)
+);
+
+//25C
+
+//104 bad
+//96 pass 1.2ns
+//64 pass 0.8ns
+//48 pass 0.6ns
+//32 pass 0.4ns
+//0 pass  0ns
+
+//0C
+//96 pass
+//0 pass
+
+//50C
+//96 bad
+//80 pass
+//64 pass
+//32 pass
+//16 pass
+//0 bad
+
+//143M
+//80 pass
+//64 pass
+//48 bad
+
+//100M
+//80 pass
+//48 pass
+//16 pass
+
+defparam sdram_clk_dly.C_STATIC_DLY=64;
+defparam sdram_clk_dly.DYN_DLY_EN="FALSE";
+defparam sdram_clk_dly.ADAPT_EN="FALSE";
+
+
+
 SDRAM_CTRL SDRAM(
-    .clk(clk_100M),
+    .clk(clk_133M),
+    .aux_clk(aux_clk),
     .rst_n(rst_n),
 
     .cmd_en(cmd_en),

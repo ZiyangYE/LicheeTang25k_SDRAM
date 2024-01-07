@@ -2,7 +2,7 @@
 <GAO_CONFIG>
     <Version>3.0</Version>
     <Mode>Standard</Mode>
-    <AoCore index="0" sample_clock="clk_100M" trig_type="0" storage_depth="1024" window_num="1" capture_amount="1024" implementation="0" trigger_pos="32" module_name="top" force_trigger_by_falling_edge="false">
+    <AoCore index="0" sample_clock="clk_133M" trig_type="0" storage_depth="1024" window_num="1" capture_amount="1024" implementation="0" trigger_pos="32" module_name="top" force_trigger_by_falling_edge="false">
         <SignalList>
             <Signal capture_enable="true">sdram_init_fin</Signal>
             <Bus capture_enable="true" name="cmd_len[9:0]">
@@ -114,6 +114,51 @@
             </Bus>
             <Signal capture_enable="true">rd_av</Signal>
             <Signal capture_enable="true">rd_en</Signal>
+            <Bus capture_enable="true" name="sdram_adr[12:0]">
+                <Signal>sdram_adr[12]</Signal>
+                <Signal>sdram_adr[11]</Signal>
+                <Signal>sdram_adr[10]</Signal>
+                <Signal>sdram_adr[9]</Signal>
+                <Signal>sdram_adr[8]</Signal>
+                <Signal>sdram_adr[7]</Signal>
+                <Signal>sdram_adr[6]</Signal>
+                <Signal>sdram_adr[5]</Signal>
+                <Signal>sdram_adr[4]</Signal>
+                <Signal>sdram_adr[3]</Signal>
+                <Signal>sdram_adr[2]</Signal>
+                <Signal>sdram_adr[1]</Signal>
+                <Signal>sdram_adr[0]</Signal>
+            </Bus>
+            <Bus capture_enable="true" name="sdram_ba[1:0]">
+                <Signal>sdram_ba[1]</Signal>
+                <Signal>sdram_ba[0]</Signal>
+            </Bus>
+            <Bus capture_enable="true" name="sdram_dqm[1:0]">
+                <Signal>sdram_dqm[1]</Signal>
+                <Signal>sdram_dqm[0]</Signal>
+            </Bus>
+            <Bus capture_enable="true" name="sdram_dq[15:0]">
+                <Signal>sdram_dq[15]</Signal>
+                <Signal>sdram_dq[14]</Signal>
+                <Signal>sdram_dq[13]</Signal>
+                <Signal>sdram_dq[12]</Signal>
+                <Signal>sdram_dq[11]</Signal>
+                <Signal>sdram_dq[10]</Signal>
+                <Signal>sdram_dq[9]</Signal>
+                <Signal>sdram_dq[8]</Signal>
+                <Signal>sdram_dq[7]</Signal>
+                <Signal>sdram_dq[6]</Signal>
+                <Signal>sdram_dq[5]</Signal>
+                <Signal>sdram_dq[4]</Signal>
+                <Signal>sdram_dq[3]</Signal>
+                <Signal>sdram_dq[2]</Signal>
+                <Signal>sdram_dq[1]</Signal>
+                <Signal>sdram_dq[0]</Signal>
+            </Bus>
+            <Signal capture_enable="true">sdram_cs</Signal>
+            <Signal capture_enable="true">sdram_ras</Signal>
+            <Signal capture_enable="true">sdram_cas</Signal>
+            <Signal capture_enable="true">sdram_we</Signal>
         </SignalList>
         <Triggers>
             <Trigger index="0">
@@ -159,5 +204,5 @@
             <Expression>M0</Expression>
         </Expressions>
     </AoCore>
-    <GAO_ID>0100101000000000</GAO_ID>
+    <GAO_ID>0000000011111101</GAO_ID>
 </GAO_CONFIG>

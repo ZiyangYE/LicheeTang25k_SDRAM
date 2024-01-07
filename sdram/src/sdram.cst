@@ -5,8 +5,10 @@
 //Part Number: GW5A-LV25MG121NC2/I1
 //Device: GW5A-25
 //Device Version: A
-//Created Time: Sat 12 30 10:24:34 2023
+//Created Time: Wed 01 03 03:14:48 2024
 
+IO_LOC "txp" C3;
+IO_PORT "txp" PULL_MODE=UP DRIVE=2 BANK_VCCIO=3.3;
 IO_LOC "sdram_dqm[1]" L7;
 IO_PORT "sdram_dqm[1]" PULL_MODE=NONE DRIVE=16 BANK_VCCIO=3.3;
 IO_LOC "sdram_dqm[0]" L8;
