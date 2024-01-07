@@ -45,3 +45,13 @@ PLL & IODelay are used to meet the timing requirements. If the frequency is chan
 - **Random Read/Write Speed:** Approximately 65MB/s.
 - **Continuous Read/Write Speed:** Approximately 260MB/s.
 - **Average Random Access Latency:** Around 100ns.
+
+## UART Output
+```text
+Write aaaa ffff 0000 to ram0. 
+Write 5555 0000 ffff to ram1.
+Read from ram0:
+aaaaffff0000
+Read from ram1:
+55550000ffff
+```
