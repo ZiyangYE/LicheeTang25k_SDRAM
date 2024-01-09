@@ -1,0 +1,36 @@
+[
+ {
+  "InstFile" : "E:/Downloads/LicheeTang25k_SDRAM-133M.old/sdram-3/src/top.sv",
+  "InstLine" : 1,
+  "InstName" : "top",
+  "ModuleFile" : "E:/Downloads/LicheeTang25k_SDRAM-133M.old/sdram-3/src/top.sv",
+  "ModuleLine" : 1,
+  "ModuleName" : "top",
+  "SubInsts" : [
+   {
+    "InstFile" : "E:/Downloads/LicheeTang25k_SDRAM-133M.old/sdram-3/src/print.svh",
+    "InstLine" : 105,
+    "InstName" : "tx",
+    "ModuleFile" : "E:/Downloads/LicheeTang25k_SDRAM-133M.old/sdram-3/src/uart_tx_V2.v",
+    "ModuleLine" : 1,
+    "ModuleName" : "uart_tx_V2"
+   },
+   {
+    "InstFile" : "E:/Downloads/LicheeTang25k_SDRAM-133M.old/sdram-3/src/top.sv",
+    "InstLine" : 202,
+    "InstName" : "SDRAM_PLL",
+    "ModuleFile" : "E:/Downloads/LicheeTang25k_SDRAM-133M.old/sdram-3/src/gowin_pll/PLL.v",
+    "ModuleLine" : 10,
+    "ModuleName" : "PLL100"
+   },
+   {
+    "InstFile" : "E:/Downloads/LicheeTang25k_SDRAM-133M.old/sdram-3/src/top.sv",
+    "InstLine" : 255,
+    "InstName" : "SDRAM",
+    "ModuleFile" : "E:/Downloads/LicheeTang25k_SDRAM-133M.old/sdram-3/src/sdram_ctrl.sv",
+    "ModuleLine" : 5,
+    "ModuleName" : "SDRAM_CTRL"
+   }
+  ]
+ }
+]

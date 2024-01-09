@@ -7,7 +7,7 @@
 
 -mod_name PLL100
 -file_name PLL
--path C:/Users/JackC/Desktop/works2023/playground/gw25k/sdram/src/gowin_pll/
+-path E:/Downloads/LicheeTang25k_SDRAM-133M/sdram-3/src/gowin_pll/
 -type PLL_ADV
 -file_type vlg
 -ssc false
