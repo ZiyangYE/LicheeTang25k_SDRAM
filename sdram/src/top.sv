@@ -9,9 +9,9 @@ module top(
     output sdram_we,
 
     output [12:0] sdram_adr,
-    output [1:0] sdram_ba,
-    output [1:0] sdram_dqm,
-    inout [15:0] sdram_dq,
+    output [1:0]  sdram_ba,
+    output [1:0]  sdram_dqm,
+    inout  [15:0] sdram_dq,
 
     output txp
 );
@@ -54,6 +54,9 @@ reg [2:0] rd_cnt;
 reg [3:0] test_status;
 reg [16*6-1:0] dataout;
 
+reg [47:0] t_result0;
+reg [47:0] t_result1;
+
 
 
 
@@ -86,8 +89,7 @@ always@(posedge clk_133M or negedge sdram_init_fin)begin
                 wr_data <= 16'hAAAA;
                 wr_mask <= 2'b00;
                 test_status <= 4'd1;
-
-                `print("Write aaaa ffff 0000 to ram0. \nWrite 5555 0000 ffff to ram1.\n",STR);
+                `print("\x0d\nWrite aaaa ffff 0000 to ram0. \x0d\nWrite 5555 0000 ffff to ram1.",STR);
                 tx_cnt <= 0;
             end
             1:begin
@@ -156,7 +158,7 @@ always@(posedge clk_133M or negedge sdram_init_fin)begin
 
                 if(tx_cnt > 96)begin
                     test_status <= 4'd11;
-                    `print("Read from ram0:\n",STR);
+                    `print("\x0d\nRead from ram0:",STR);
                 end
             end
             11:begin
@@ -168,7 +170,7 @@ always@(posedge clk_133M or negedge sdram_init_fin)begin
             12:begin
                 if(tx_cnt > 144)begin
                     test_status <= 4'd13;
-                    `print("\nRead from ram1:\n",STR);
+                    `print("\x0d\nRead from ram1:",STR);
                 end
             end
             13:begin
@@ -180,7 +182,15 @@ always@(posedge clk_133M or negedge sdram_init_fin)begin
             14:begin
                 if(tx_cnt>192)begin
                     test_status <= 4'd15;
-                    `print("\n\n",STR);
+                    t_result0 = dataout[95:48];
+                    t_result1 = dataout[47:0];
+                    if(t_result0 == 48'haaaaffff0000 && t_result1 == 48'h55550000ffff )begin
+                        `print("\x0d\n\x0d\n[OK] [OK] [OK] [OK] [OK] [OK]\n\n",STR);
+                    end
+                    else begin
+                        `print("\x0d\n\x0d\n[TEST FAILED] !!!!!!!!!!!!!!!\n\n",STR);
+                    end
+//                    `print("\n\n",STR);
                 end
             end
         endcase

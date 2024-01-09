@@ -1,0 +1,29 @@
+{
+ "Device" : "GW5A-25A",
+ "Files" : [
+  {
+   "Path" : "E:/Downloads/LicheeTang25k_SDRAM-133M.old/sdram-3/src/gowin_pll/PLL.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "E:/Downloads/LicheeTang25k_SDRAM-133M.old/sdram-3/src/sdram_ctrl.sv",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "E:/Downloads/LicheeTang25k_SDRAM-133M.old/sdram-3/src/top.sv",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "E:/Downloads/LicheeTang25k_SDRAM-133M.old/sdram-3/src/uart_tx_V2.v",
+   "Type" : "verilog"
+  }
+ ],
+ "IncludePath" : [
+
+ ],
+ "LoopLimit" : 2000,
+ "ResultFile" : "E:/Downloads/LicheeTang25k_SDRAM-133M.old/sdram-3/impl/temp/rtl_parser.result",
+ "Top" : "",
+ "VerilogStd" : "sysv",
+ "VhdlStd" : "vhdl_93"
+}
